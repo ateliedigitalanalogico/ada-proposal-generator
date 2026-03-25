@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>ADA — Propostas</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #000;
+  font-family: 'Courier New', monospace;
+  color: rgba(255,255,255,.6);
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  padding: 48px 56px 40px;
+  border-bottom: 1px solid rgba(255,214,0,.08);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.wordmark {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wordmark-ada {
+  font-size: 32px;
+  letter-spacing: .25em;
+  color: #FFD600;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.wordmark-sub {
+  font-size: 10px;
+  letter-spacing: .3em;
+  color: rgba(255,255,255,.25);
+  text-transform: uppercase;
+}
+
+.header-meta {
+  font-size: 11px;
+  letter-spacing: .15em;
+  color: rgba(255,255,255,.18);
+  text-align: right;
+  line-height: 1.8;
+}
+
+/* Lista */
+.list {
+  padding: 0 56px 80px;
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: .35em;
+  color: rgba(255,214,0,.3);
+  text-transform: uppercase;
+  padding: 40px 0 20px;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  margin-bottom: 0;
+}
+
+.proposal {
+  display: grid;
+  grid-template-columns: 220px 1fr 180px;
+  align-items: center;
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  gap: 32px;
+  text-decoration: none;
+  color: inherit;
+  transition: background .15s;
+}
+
+.proposal:hover { background: rgba(255,214,0,.02); }
+.proposal:hover .name { color: #FFD600; }
+
+.col-id { }
+
+.id-code {
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: rgba(255,214,0,.3);
+  line-height: 1;
+}
+
+.id-date {
+  font-size: 12px;
+  color: rgba(255,255,255,.2);
+  margin-top: 6px;
+  letter-spacing: .04em;
+}
+
+.col-main { }
+
+.name {
+  font-size: 22px;
+  letter-spacing: .04em;
+  color: rgba(255,255,255,.88);
+  line-height: 1.2;
+  transition: color .15s;
+}
+
+.contact {
+  font-size: 13px;
+  color: rgba(255,255,255,.3);
+  margin-top: 8px;
+  letter-spacing: .03em;
+}
+
+.col-meta { text-align: right; }
+
+.status {
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.2);
+  display: block;
+}
+.status.enviada  { color: rgba(255,214,0,.5); }
+.status.aprovada { color: rgba(100,220,100,.5); }
+.status.rascunho { color: rgba(255,255,255,.2); }
+.status.perdida  { color: rgba(255,80,80,.3); }
+
+.followup {
+  font-size: 11px;
+  letter-spacing: .05em;
+  margin-top: 8px;
+  display: block;
+  color: rgba(255,255,255,.18);
+}
+.followup.due      { color: #FF6B35; animation: pulse 2s infinite; }
+.followup.upcoming { color: rgba(255,214,0,.6); }
+
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.35;} }
+
+.empty {
+  font-size: 14px;
+  color: rgba(255,255,255,.18);
+  padding: 64px 0;
+  letter-spacing: .05em;
+}
+
+/* Divider */
+.divider {
+  width: 32px;
+  height: 1px;
+  background: rgba(255,214,0,.2);
+  margin: 0 auto;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">
+    <!-- Alfa -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="225 225 126 126" width="44" height="44">
+      <polygon fill="#FFD600" points="268.01 297 288 257.02 307.99 297 324 297 288 225 252 297 268.01 297"/>
+      <polygon fill="#FFD600" points="238.5 324 225 351 241.01 351 250.01 333 254.51 324 238.5 324"/>
+      <polygon fill="#FFD600" points="321.49 324 325.99 333 334.99 351 351 351 337.5 324 321.49 324"/>
+    </svg>
+  </div>
+  <div class="header-meta">
+    Propostas · localhost:3333<br>
+    ada.art.br
+  </div>
+</div>
+
+<div class="list">
+  <div class="section-label">Propostas</div>
+  <div id="list"><div class="empty">Carregando...</div></div>
+</div>
+
+<script>
+fetch('/db/proposals.json')
+  .then(r => r.json())
+  .then(data => {
+    const list = document.getElementById('list');
+    if (!data.length) {
+      list.innerHTML = '<div class="empty">Nenhuma proposta ainda.</div>';
+      return;
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    list.innerHTML = [...data].reverse().map(p => {
+      let fu = '';
+      if (p.followup) {
+        const diff = Math.ceil((new Date(p.followup) - new Date(today)) / 86400000);
+        if (diff < 0)      fu = `<span class="followup due">● follow-up atrasado ${Math.abs(diff)}d</span>`;
+        else if (diff === 0) fu = `<span class="followup due">● follow-up hoje</span>`;
+        else if (diff <= 3)  fu = `<span class="followup upcoming">follow-up em ${diff}d</span>`;
+        else                 fu = `<span class="followup">follow-up ${p.followup}</span>`;
+      }
+
+      return `
+      <a class="proposal" href="/db/${p.file}" target="_blank">
+        <div class="col-id">
+          <div class="id-code">${p.id}</div>
+          <div class="id-date">${p.date}</div>
+        </div>
+        <div class="col-main">
+          <div class="name">${p.client} · ${p.project}</div>
+          <div class="contact">${p.contact} · ${p.responsible}</div>
+        </div>
+        <div class="col-meta">
+          <span class="status ${p.status}">${p.status}</span>
+          ${fu}
+        </div>
+      </a>`;
+    }).join('');
+  })
+  .catch(() => {
+    document.getElementById('list').innerHTML = '<div class="empty">Erro ao carregar proposals.json</div>';
+  });
+</script>
+</body>
+</html>

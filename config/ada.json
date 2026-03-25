@@ -1,0 +1,51 @@
+{
+  "studio": {
+    "name": "ADA — Ateliê Digital Analógico",
+    "founded": 2015,
+    "site": "ada.art.br",
+    "email": "contato@ada.art.br",
+    "positioning": "Tecnologia como linguagem. Brasil como ponto de vista.",
+    "manifesto": "A ADA chegou antes. Opera na borda — onde as coisas ainda não têm nome, antes das categorias. Desde 2015, tem nome: ADA. E vai continuar sendo antes.",
+    "not": "Não somos empresa de AV. Não somos agência genérica. Não somos fornecedora de projeção. Não executamos ideias de outros."
+  },
+
+  "contacts": [
+    {
+      "name": "Caio Fazolin",
+      "role": "Diretor Criativo",
+      "email": "caio@ada.art.br",
+      "phone": "+55 11 98434-0084"
+    },
+    {
+      "name": "Tatiane Gonzalez",
+      "role": "Diretora de Operações",
+      "email": "tatiane@ada.art.br",
+      "phone": null
+    }
+  ],
+
+  "portfolio": [
+    "Anish Kapoor (Casa Bradesco)",
+    "Racionais MCs 30 anos",
+    "Festival G20",
+    "ALL Amazônia em Times Square",
+    "COP28 Dubai",
+    "Liniker",
+    "Natiruts",
+    "Encontro dos Titãs",
+    "Netflix",
+    "Sony Pictures",
+    "Pinacoteca SP"
+  ],
+
+  "taglines": [
+    "ANTES DA IA.",
+    "ANTES DO PROMPT.",
+    "ANTES DO IMERSIVO.",
+    "ANTES DO MAPPING.",
+    "ANTES DO ALGORITMO.",
+    "ANTES DA EXPERIÊNCIA."
+  ],
+
+  "quem_somos": "ADA — Ateliê Digital Analógico é uma plataforma criativa fundada em 2015, especializada em experiências imersivas, projection mapping, motion design, IA e instalações interativas.\n\nOperamos na intersecção entre tecnologia e cultura. Nossa linguagem é construída sobre imagem em movimento, espaço físico e narrativa conceitual — com IA como ferramenta, não como gimmick."
+}

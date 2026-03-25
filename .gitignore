@@ -1,0 +1,12 @@
+# Dependências
+node_modules/
+
+# PDFs gerados
+**/*.pdf
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Claude internal
+.claude/

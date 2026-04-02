@@ -129,10 +129,14 @@ body {
   color: rgba(255,255,255,.2);
   display: block;
 }
-.status.enviada  { color: rgba(255,214,0,.5); }
-.status.aprovada { color: rgba(100,220,100,.5); }
-.status.rascunho { color: rgba(255,255,255,.2); }
-.status.perdida  { color: rgba(255,80,80,.3); }
+.status.rascunho     { color: rgba(255,255,255,.2); }
+.status.enviada      { color: rgba(255,214,0,.5); }
+.status.negociacao   { color: rgba(255,165,0,.6); }
+.status.aprovada     { color: rgba(100,220,100,.5); }
+.status.em_producao  { color: rgba(74,127,212,.8); }
+.status.fechada      { color: rgba(100,220,100,.7); }
+.status.concluida    { color: rgba(255,255,255,.28); }
+.status.perdida      { color: rgba(255,80,80,.3); }
 
 .followup {
   font-size: 11px;
@@ -196,7 +200,12 @@ fetch('/db/proposals.json')
 
     const today = new Date().toISOString().slice(0, 10);
 
-    list.innerHTML = [...data].reverse().map(p => {
+    const sorted = [...data].sort((a, b) => a.date.localeCompare(b.date));
+
+    list.innerHTML = sorted.map(p => {
+      const [y, m, d] = p.date.split('-');
+      const dateFmt = `${d}/${m}/${y}`;
+
       let fu = '';
       if (p.followup) {
         const diff = Math.ceil((new Date(p.followup) - new Date(today)) / 86400000);
@@ -210,11 +219,11 @@ fetch('/db/proposals.json')
       <a class="proposal" href="/db/${p.file}" target="_blank">
         <div class="col-id">
           <div class="id-code">${p.id}</div>
-          <div class="id-date">${p.date}</div>
+          <div class="id-date">${dateFmt}</div>
         </div>
         <div class="col-main">
-          <div class="name">${p.client} · ${p.project}</div>
-          <div class="contact">${p.contact} · ${p.responsible}</div>
+          <div class="name">${p.project}</div>
+          <div class="contact">${p.client}</div>
         </div>
         <div class="col-meta">
           <span class="status ${p.status}">${p.status}</span>
